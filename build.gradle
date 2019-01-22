@@ -1,0 +1,51 @@
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+    maven { url 'https://nexus.sagiton.pl/repository/maven-public' }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: "jacoco"
+apply plugin: 'io.spring.dependency-management'
+
+apply plugin: 'checkstyle'
+
+group = 'pl.sagiton'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework:spring-framework-bom:5.1.4.RELEASE'
+    }
+    dependencies {
+        dependency group: 'org.projectlombok', name: 'lombok', version: '1.16.20'
+        dependency group: 'org.mockito', name: 'mockito-junit-jupiter', version: '2.21.0'
+
+    }
+}
+dependencies {
+
+    // UTILITIES
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+    implementation group: 'org.apache.commons', name: 'commons-lang3'
+
+
+    // UNIT TESTS
+    testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
+    testImplementation group: 'org.mockito', name: 'mockito-core'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
+}
+checkstyleMain {
+    configFile = project.file("google_checks.xml")
+}
+
+checkstyle {
+    toolVersion ="8.12"
+}
